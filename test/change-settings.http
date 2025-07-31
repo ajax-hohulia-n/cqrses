@@ -1,0 +1,11 @@
+POST http://localhost:8080/hub/00000001/settings
+Content-Type: application/json
+
+{
+  "name": "My Hub1111111",
+  "ownerId": "Nikita",
+  "settings": {
+    "permission": "ADMIN"
+  },
+  "active": false
+}

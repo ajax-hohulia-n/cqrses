@@ -1,0 +1,2 @@
+GET http://localhost:8080/hub/00000001/permissions
+Accept: application/json
