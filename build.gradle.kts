@@ -12,22 +12,16 @@ java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://repo.akka.io/maven") }   // офіційний репо Akka 2.7+
+    maven { url = uri("https://repo.akka.io/maven") }
 }
 
-// — Version
-val akkaVersion = "2.8.5"   // ядро Akka (BSL 1.1)
-val akkaProjVersion = "1.5.4"  // Akka Projections (сумісні з 2.9)
-val alpakkaKafkaVersion = "7.0.3"   // Alpakka Kafka (сумісний з 2.9)
-val cassandraVersion = "1.1.0"     // Akka Persistence Cassandra
-val reactorBomVersion = "2024.0.7"  // Project Reactor BOM (reactor-core 3.7.7)
+val akkaVersion = "2.8.5"
+val akkaProjVersion = "1.5.4"
+val cassandraVersion = "1.1.0"
 
 dependencies {
-    // BOM (enforcedPlatform блокує сторонні версії)
+    // BOM
     implementation(enforcedPlatform("com.typesafe.akka:akka-bom_2.13:$akkaVersion"))
-
-    // - Project Reactor BOM
-    implementation(enforcedPlatform("io.projectreactor:reactor-bom:$reactorBomVersion"))
 
     // — core Akka та streams
     implementation("com.typesafe.akka:akka-actor-typed_2.13")
@@ -42,15 +36,11 @@ dependencies {
     // — Projections (read-side)
     implementation("com.lightbend.akka:akka-projection-eventsourced_2.13:$akkaProjVersion")
     implementation("com.lightbend.akka:akka-projection-cassandra_2.13:$akkaProjVersion")
-    implementation("com.lightbend.akka:akka-projection-kafka_2.13:$akkaProjVersion")
 
-    // — Kafka stream connector
-    implementation("com.typesafe.akka:akka-stream-kafka_2.13:$alpakkaKafkaVersion")
-
-    // — Spring WebFlux REST-ендпоінт
+    // — Spring WebFlux REST
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    // — Kotlin/Jackson утиліти
+    // — Kotlin/Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -59,16 +49,14 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-    // — Тестові залежності
+    // — Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 
-    // Akka test-kit’и
     testImplementation("com.typesafe.akka:akka-actor-testkit-typed_2.13")
     testImplementation("com.lightbend.akka:akka-projection-testkit_2.13:$akkaProjVersion")
-    testImplementation("com.typesafe.akka:akka-stream-kafka-testkit_2.13:$alpakkaKafkaVersion")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

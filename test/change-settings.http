@@ -5,7 +5,7 @@ Content-Type: application/json
   "name": "My Hub1111111",
   "ownerId": "Nikita",
   "settings": {
-    "permission": "ADMIN"
+    "permission": "ADMINNN"
   },
   "active": false
 }
