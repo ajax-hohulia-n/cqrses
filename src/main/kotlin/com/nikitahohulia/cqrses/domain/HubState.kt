@@ -10,9 +10,14 @@ data class HubState(
     private var appliedEventsCount: Int = 0,
 ) : Serializable {
 
-    fun apply(event: Event): HubState = when (event) {
-        is SettingsUpdated -> copy(settings = event.newSettings, appliedEventsCount = this.appliedEventsCount + 1)
+    fun apply(event: Event): HubState {
+        return when (event) {
+            is SettingsUpdated -> {
+                println("Applying event: $event, applied events count: $appliedEventsCount")
+                copy(settings = event.newSettings, appliedEventsCount = this.appliedEventsCount + 1)
+            }
 
-        else -> throw IllegalStateException("Unknown event $event")
+            else -> throw IllegalStateException("Unknown event $event")
+        }
     }
 }
