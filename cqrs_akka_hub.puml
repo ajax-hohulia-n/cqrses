@@ -1,0 +1,39 @@
+@startuml CQRS_Akka_Hub
+
+!theme spacelab
+
+actor Client
+
+package "Spring Boot REST" {
+  [CommandController\nPOST /hub/{id}/settings] as CommandAPI
+  [QueryController\nGET /hub/{id}/settings]    as QueryAPI
+}
+
+package "Akka Cluster" {
+  [HubEntity\n(EventSourcedBehavior)] as HubEntity
+  [ProjectionBehavior\n(settings-projection)] as Projection
+}
+
+database "Cassandra\n(cqrs keyspace)" {
+  [journal.messages]
+  [snapshots]
+}
+
+database "Cassandra\n(cqrs_projection)" {
+  [hub_settings]
+  [hub_permissions]
+}
+
+Client --> CommandAPI : Command\n(JSON)
+CommandAPI --> HubEntity : AskPattern\nUpdateSettings
+HubEntity --> journal.messages : persist\nSettingsUpdated
+HubEntity --> snapshots : periodic\nsnapshot
+
+journal.messages -left-> Projection : eventsByTag\nsettings-updated
+Projection --> hub_settings : INSERT / UPDATE
+Projection --> hub_permissions
+
+QueryAPI --> hub_settings : SELECT
+QueryAPI --> hub_permissions : SELECT
+
+@enduml
